@@ -1,6 +1,7 @@
 yarn add \
-called \
-falzy \
-truly \
+depher \
+detr \
+letgo \
+raze \
 zelf \
 --save

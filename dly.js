@@ -45,55 +45,69 @@
 
 	@include:
 		{
-			"called": "called",
 			"child": "child_process",
-			"falzy": "falzy",
-			"truly": "truly",
+			"depher": "depher",
+			"detr": "detr",
+			"letgo": "letgo",
+			"raze": "raze",
 			"zelf": "zelf"
 		}
 	@end-include
 */
 
-const called = require( "called" );
 const child = require( "child_process" );
-const falzy = require( "falzy" );
-const truly = require( "truly" );
+const depher = require( "depher" );
+const detr = require( "detr" );
+const letgo = require( "letgo" );
+const raze = require( "raze" );
 const zelf = require( "zelf" );
 
-const dly = function dly( pause, later ){
+const DEFAULT_PAUSE = 1000;
+
+const dly = function dly( pause, synchronous, option ){
 	/*;
 		@meta-configuration:
 			{
-				"pause:required": "number",
-				"later": "function"
+				"pause": "number",
+				"synchronous": boolean,
+				"option": "object"
 			}
 		@end-meta-configuration
 	*/
 
-	if( falzy( pause ) || typeof pause != "number" ){
-		throw new Error( "invalid pause value" );
-	}
+	let parameter = raze( arguments );
 
-	if( truly( later ) && typeof later != "function" ){
-		throw new Error( "invalid later method" );
-	}
+	pause = depher( parameter, NUMBER, DEFAULT_PAUSE );
 
-	if( truly( later ) ){
-		later = called.bind( zelf( this ) )( later );
+	synchronous = depher( parameter, BOOLEAN, false );
 
-		child.exec(
-			`${ process.execPath } -e "setTimeout( ( ) => true, ${ pause } );"`,
-			{ "detached": true },
-			( ) => { try{ later( ); }catch( error ){ } }
-		);
+	option = detr( parameter, {
+		"command": `${ process.execPath } --eval "setTimeout( ( ) => true, ${ pause } );"`
+	} );
+
+	let command = option.command;
+
+	if( synchronous ){
+		try{
+			child.execSync( command, { "stdio": "ignore" } );
+
+			return true;
+
+		}catch( error ){
+			return false;
+		}
 
 	}else{
-		child.execSync(
-			`${ process.execPath } -e "setTimeout( ( ) => true, ${ pause } );"`,
-			{ "detached": true }
-		);
+		return letgo.bind( zelf( this ) )( function later( callback ){
+			child.exec( command, { "detached": true, "stdio": "ignore" }, function done( error ){
+				if( error instanceof Error ){
+					callback( new Error( `cannot delay properly, ${ error.stack }` ), false );
 
-		return true;
+				}else{
+					callback( null, true );
+				}
+			} );
+		} );
 	}
 };
 
