@@ -1,0 +1,30 @@
+{
+	"name": "dly",
+	"version": "0.0.0",
+	"description": "Pause node.",
+	"main": "dly.js",
+	"scripts": {
+		"test": "mocha dly-test.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/volkovasystems/dly.git"
+	},
+	"keywords": [
+		"pause",
+		"node",
+		"dly"
+	],
+	"author": "Richeve S. Bebedor <richeve.bebedor@gmail.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/volkovasystems/dly/issues"
+	},
+	"homepage": "https://github.com/volkovasystems/dly#readme",
+	"dependencies": {
+		"called": "^0.31.0",
+		"falzy": "^0.20.0",
+		"truly": "^0.19.0",
+		"zelf": "^0.12.0"
+	}
+}
