@@ -85,7 +85,7 @@ const dly = function dly( pause, synchronous, option ){
 		"command": `${ process.execPath } --eval "setTimeout( ( ) => true, ${ pause } );"`
 	} );
 
-	let command = option.command;
+	let command = `set -e; $(${ option.command });`;
 
 	if( synchronous ){
 		try{
