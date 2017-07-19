@@ -1,4 +1,5 @@
 yarn add \
+booleanize \
 depher \
 detr \
 letgo \

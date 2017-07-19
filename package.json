@@ -1,6 +1,6 @@
 {
 	"name": "dly",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "Pause node.",
 	"main": "dly.js",
 	"scripts": {
@@ -22,6 +22,7 @@
 	},
 	"homepage": "https://github.com/volkovasystems/dly#readme",
 	"dependencies": {
+		"booleanize": "^0.1.0",
 		"depher": "^0.36.0",
 		"detr": "^0.1.0",
 		"letgo": "^0.52.0",

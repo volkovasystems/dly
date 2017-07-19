@@ -140,6 +140,13 @@ backd@^0.4.0:
     truly "^0.19.0"
     zelf "^0.12.0"
 
+booleanize@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/booleanize/-/booleanize-0.1.0.tgz#751e64c682d288fc291b733c5c44b581aa5200fa"
+  dependencies:
+    babel-runtime "^6.23.0"
+    truly "^0.19.0"
+
 browser-fingerprint@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/browser-fingerprint/-/browser-fingerprint-0.0.1.tgz#8df3cdca25bf7d5b3542d61545d730053fce604a"

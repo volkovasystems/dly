@@ -45,6 +45,7 @@
 
 	@include:
 		{
+			"booleanize": "booleanize",
 			"child": "child_process",
 			"depher": "depher",
 			"detr": "detr",
@@ -55,6 +56,7 @@
 	@end-include
 */
 
+const booleanize = require( "booleanize" );
 const child = require( "child_process" );
 const depher = require( "depher" );
 const detr = require( "detr" );
@@ -63,6 +65,7 @@ const raze = require( "raze" );
 const zelf = require( "zelf" );
 
 const DEFAULT_PAUSE = 1000;
+const DEFAULT_DIRECTORY = process.cwd( );
 
 const dly = function dly( pause, synchronous, option ){
 	/*;
@@ -82,16 +85,20 @@ const dly = function dly( pause, synchronous, option ){
 	synchronous = depher( parameter, BOOLEAN, false );
 
 	option = detr( parameter, {
-		"command": `${ process.execPath } --eval "setTimeout( ( ) => true, ${ pause } );"`
+		"command": `${ process.execPath } --eval "setTimeout( ( ) => true, ${ pause } );"; echo -n true;`,
+		"directory": DEFAULT_DIRECTORY
 	} );
 
-	let command = `set -e; $(${ option.command });`;
+	option.stdio = [ "ignore", "pipe", "ignore" ];
+
+	let command = `set -e; echo -n $(${ option.command });`;
 
 	if( synchronous ){
 		try{
-			child.execSync( command, { "stdio": "ignore" } );
-
-			return true;
+			return booleanize( child.execSync( command, {
+				"directory": option.directory,
+				"stdio": option.stdio
+			} ).toString( ) );
 
 		}catch( error ){
 			return false;
@@ -99,12 +106,16 @@ const dly = function dly( pause, synchronous, option ){
 
 	}else{
 		return letgo.bind( zelf( this ) )( function later( callback ){
-			child.exec( command, { "detached": true, "stdio": "ignore" }, function done( error ){
+			child.exec( command, {
+				"detached": true,
+				"directory": option.directory,
+				"stdio": option.stdio
+			}, function done( error, result ){
 				if( error instanceof Error ){
 					callback( new Error( `cannot delay properly, ${ error.stack }` ), false );
 
 				}else{
-					callback( null, true );
+					callback( null, booleanize( result.toString( ) ) );
 				}
 			} );
 		} );
